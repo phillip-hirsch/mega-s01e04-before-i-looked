@@ -3,7 +3,7 @@ import type { DigestRow, Night } from '../digest/types.js';
 const dash = '—';
 
 function isWarn(row: DigestRow) {
-  return row.retries >= 3 || row.lastStatus === 'fail';
+  return row.retries >= 3 || row.fails > 0;
 }
 
 function BadLines({ count }: { count: number }) {

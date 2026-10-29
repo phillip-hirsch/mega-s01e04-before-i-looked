@@ -35,6 +35,7 @@ describe('readNight on runs/2026-10-28.jsonl', () => {
       owner: 'rook',
       runs: 4,
       retries: 3,
+      fails: 0,
       lastStatus: 'ok',
       lastError: 'upstream 503',
       firstAt: '2026-10-29T01:30:00+01:00',
@@ -47,7 +48,7 @@ describe('readNight on runs/2026-10-28.jsonl', () => {
       firstAt: '2026-10-28T23:00:06+01:00',
       lastAt: '2026-10-29T05:00:04+01:00',
     });
-    expect(byJob.get('notes/backup')).toMatchObject({ lastStatus: 'fail', lastError: 'quota exceeded' });
+    expect(byJob.get('notes/backup')).toMatchObject({ lastStatus: 'fail', fails: 1, lastError: 'quota exceeded' });
     expect(byJob.get('rig/rotate-logs')?.lastError).toBeNull();
   });
 

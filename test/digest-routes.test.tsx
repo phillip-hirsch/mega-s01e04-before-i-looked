@@ -22,6 +22,10 @@ const NIGHTS = {
   '2026-01-01': `${FULL}\n`,
   '2026-01-02': '',
   '2026-01-03': `${FULL}\nnot json\n`,
+  '2026-01-04': [
+    line('2026-10-28T03:00:00+01:00', 'recovered', 'fail', 'cy', 'disk full'),
+    line('2026-10-28T03:05:00+01:00', 'recovered', 'ok', 'cy'),
+  ].join('\n'),
 };
 
 let runsDir: string;
@@ -53,6 +57,11 @@ describe('GET /digest/:night', () => {
     expect(rowOf(html, 'mid-broken')).toMatch(/class="[^"]*\bwarn\b/);
     expect(rowOf(html, 'zeta-ok')).not.toMatch(/\bwarn\b/);
     expect(html).not.toMatch(/could not be read/);
+  });
+
+  it('marks a job that failed even when its last run was ok', async () => {
+    const html = await (await app.request('/digest/2026-01-04')).text();
+    expect(rowOf(html, 'recovered')).toMatch(/class="[^"]*\bwarn\b/);
   });
 
   it('renders a missing owner and last error as —', async () => {
